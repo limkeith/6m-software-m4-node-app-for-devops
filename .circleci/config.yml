@@ -14,8 +14,13 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
+          name: Set NODE_ENV to development
+          command: |
+            echo "Setting NODE_ENV to development"
+            export NODE_ENV=development
+      - run:
           name: Install Dependencies
-          command: npm install
+          command: npm install --also=dev
 
   test:
     docker:
