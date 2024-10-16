@@ -1,16 +1,51 @@
+version: 2.1
+
 orbs:
   node: circleci/node@5.0.1
   docker: circleci/docker@2.1.4
   heroku: circleci/heroku@2.0.0
 
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+  test:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - run:
+          name: Run Tests
+          command: npm run test
+
+  build-and-push:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - checkout
+      - run:
+          name: Build and Push
+          command: echo "This is where build and push logic goes"
+
+
+
+
 deploy:
   docker:
-    -image: cimg/node:16.10
+    - image: cimg/node:16.10
   steps:
-    -setup_remote_docker
-    -heroku/install
-    -checkout
-    -run:
+    - setup_remote_docker
+    - heroku/install
+    - checkout
+    - run:
       name: Heroku Container Push
       command: |
         heroku container:login
