@@ -21,6 +21,9 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install --also=dev
+      - run:
+          name: Run Tests
+          command: npm run test    
 
   test:
     docker:
