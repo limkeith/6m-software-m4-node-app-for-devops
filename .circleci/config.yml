@@ -20,6 +20,7 @@ jobs:
     docker:
       - image: cimg/node:16.10
     steps:
+      - checkout
       - run: 
           echo "Running tests..."
           npm run test
@@ -27,7 +28,6 @@ jobs:
   
 
   workflows:
-    version: 2  
     simple_workflow:
       jobs: 
         - build
