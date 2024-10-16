@@ -35,24 +35,23 @@ jobs:
           name: Build and Push
           command: echo "This is where build and push logic goes"
 
-
-
-
   deploy:
     docker:
       - image: cimg/node:16.10
     steps:
-    - setup_remote_docker
-    - heroku/install
-    - checkout
-    - run:
-      name: Heroku Container Push
-      command: |
-        heroku container:login
-        heroku container:push web -a keith-su-devops
-        heroku container:release web -a keith-su-devops 
+      - setup_remote_docker:
+          version: 20.10.7 
+      - heroku/install
+      - checkout
+      - run:
+          name: Heroku Container Push
+          command: |
+            heroku container:login
+            heroku container:push web -a keith-su-devops
+            heroku container:release web -a keith-su-devops 
 
 workflows:
+  version: 2
   simple_workflow:
     jobs:
       - build
