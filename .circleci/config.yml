@@ -27,13 +27,13 @@ jobs:
 
   
 
-  workflows:
-    simple_workflow:
-      jobs: 
-        - build
-        - test:
-            requires:
-              - build
+workflows:
+  simple_workflow:
+    jobs: 
+      - build
+      - test:
+          requires:
+          - build
             
 
   
