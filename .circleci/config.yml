@@ -1,49 +1,26 @@
-version: 2.1
 
-# Define jobs
-jobs:
-  # Test Job
-  test:
-    docker:
-      - image: circleci/node:14
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: npm install
-      - run:
-          name: Run tests
-          command: npm test
-
-  # Build and Push Job
-  build-and-push:
-    docker:
-      - image: circleci/docker:19.03.12
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.7
-      - run:
-          name: Build Docker Image
-          command: docker build -t education-space/my-node-app:latest .
-      - run:
-          name: Log in to Docker Hub
-          command: |
-            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-      - run:
-          name: Push Docker Image
-          command: docker push education-space/my-node-app:latest
-
-# Define workflow
-workflows:
-  version: 2
-  test-and-publish:
-    jobs:
-      - test
-      - build-and-push:
-          requires:
-            - test  # Ensures that build-and-push runs only after test passes
-          filters:
-            branches:
-              only:
-                - main  # Only push Docker image on pushes to main branch
+  version: 2.1
+  jobs:
+    build:
+      docker:
+        - image: cimg/node:current
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: npm install
+    test:
+      docker:
+        - image: cimg/node:current
+      steps:
+        - checkout
+        - run:
+            name: Run tests
+            command: npm test
+  workflows:
+    build_and_test:
+      jobs:
+        - build
+        - test:
+            requires:
+              - build              
