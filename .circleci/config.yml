@@ -20,7 +20,7 @@ jobs:
       - image: circleci/docker:latest
     steps:
       - setup_remote_docker:
-          version: 27.2.0  # Specify the Docker version
+          version: 20.10.7  # Specify the Docker version
       - checkout
       - run:
           name: Build Docker Image
