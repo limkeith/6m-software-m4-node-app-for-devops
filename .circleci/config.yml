@@ -7,7 +7,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/node:17
+      - image: circleci/node:22
     steps:
       - checkout
       - node/install-packages
@@ -17,7 +17,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:17
+      - image: circleci/node:22
     steps:
       - checkout
       - node/install-packages
@@ -31,7 +31,6 @@ jobs:
     steps:
       - setup_remote_docker:
           version: 20.10.7
-          docker_layer_caching: true
       - checkout
       - run:
           name: Build Docker Image
@@ -60,25 +59,29 @@ workflows:
   ci-and-cd:
     jobs:
       - build:
+          name: build-main
           filters:
             branches:
               only: main
       - test:
+          name: test-main
           filters:
             branches:
               only: main
       - build:
+          name: build-release
           filters:
             branches:
               only: release
       - test:
+          name: test-release
           filters:
             branches:
               only: release
       - publish:
           requires:
-            - build
-            - test
+            - build-release
+            - test-release
           filters:
             branches:
               only: release
